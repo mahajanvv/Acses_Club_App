@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/idprofileActivity"
+            android:icon="@mipmap/ic_account_circle_black_24dp"
+            android:title="Profile" />
+        <item
+            android:id="@+id/idBlogsActivity"
+            android:title="Blogs" />
+        <item
+            android:id="@+id/idPostBlogsActivity"
+            android:title="Post Blogs" />
+        <item
+            android:id="@+id/idCreateEventActivity"
+            android:icon="@mipmap/ic_event_black_24dp"
+            android:title="Create Event" />
+        <item
+            android:id="@+id/idUpcomingEventActivity"
+            android:title="Upcoming Events" />
+        <item
+            android:id="@+id/idAboutActivity"
+
+            android:title="About" />
+
+    </group>
+
+</menu>

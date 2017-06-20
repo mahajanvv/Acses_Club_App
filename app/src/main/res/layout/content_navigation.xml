@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_navigation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.dontknow.acses.Navigation"
+    tools:showIn="@layout/app_bar_navigation">
+
+    <TextView
+        android:text="Blogs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/idtextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        android:textColorLink="#000000"
+        android:textAlignment="center" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/idtextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/idblog_list">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>

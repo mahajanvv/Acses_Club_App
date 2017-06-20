@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ideventdelete"
+
+        android:title="Delete Event"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_delete_forever_black_24dp"
+        android:visible="true"
+
+        />
+    <item android:id="@+id/ideventdone"
+        android:title="Confirm Event"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_done_black_24dp"
+        android:visible="true"/>
+
+</menu>

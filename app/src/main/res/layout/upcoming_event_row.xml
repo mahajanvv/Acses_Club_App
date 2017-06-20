@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Type"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:id="@+id/idrow_event_type"/>
+
+        <TextView
+            android:text="Event Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:padding="5dp"
+            android:id="@+id/idrow_event_title"/>
+
+        <TextView
+            android:text="Event Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textStyle="normal"
+            android:padding="5dp"
+            android:id="@+id/idrow_event_description"/>
+
+        <TextView
+            android:text="Event Date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:padding="5dp"
+            android:id="@+id/idrow_event_date"/>
+
+        <TextView
+            android:text="Event Time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/idrow_event_time"
+            android:textSize="16dp"
+            android:padding="5dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:text="Event userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/idrow_event_userName"
+            android:textSize="12dp"
+            android:textAlignment="viewEnd"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:text="Event Publish Details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal"
+            android:textSize="12dp"
+            android:textAlignment="viewEnd"
+            android:id="@+id/idrow_event_publish_details"/>
+
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

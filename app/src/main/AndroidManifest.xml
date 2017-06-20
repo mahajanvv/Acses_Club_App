@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.dontknow.acses">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".Acses"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".PostActivity"
+            android:label="Post Blogs" />
+        <activity
+            android:name=".login_Activity"
+            android:label="Login " />
+        <activity
+            android:name=".memberprofile"
+            android:label="Profile" />
+        <activity
+            android:name=".Navigation"
+            android:label="Acses"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".EventActivity"
+            android:label="Create Event" />
+        <activity
+            android:name=".Upcoming_Events"
+            android:label="Upcoming events" />
+        <activity android:name=".AboutActivity"
+            android:label="About Section"/>
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".EditEventActivity"
+            android:label="Edit Event"/>
+        <activity android:name=".Edit_Blog_Activity"
+            android:label="Edit Blog"/>
+    </application>
+
+</manifest>
