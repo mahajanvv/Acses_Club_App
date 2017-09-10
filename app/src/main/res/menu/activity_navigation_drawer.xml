@@ -8,9 +8,11 @@
             android:title="Profile" />
         <item
             android:id="@+id/idBlogsActivity"
+            android:icon="@mipmap/ic_featured_play_list_black_24dp"
             android:title="Blogs" />
         <item
             android:id="@+id/idPostBlogsActivity"
+            android:icon="@mipmap/ic_featured_play_list_black_24dp"
             android:title="Post Blogs" />
         <item
             android:id="@+id/idCreateEventActivity"
@@ -18,10 +20,11 @@
             android:title="Create Event" />
         <item
             android:id="@+id/idUpcomingEventActivity"
-            android:title="Upcoming Events" />
+            android:title="Upcoming Events"
+            android:icon="@mipmap/ic_today_black_24dp"/>
         <item
             android:id="@+id/idAboutActivity"
-
+            android:icon="@mipmap/ic_info_black_24dp"
             android:title="About" />
 
     </group>

@@ -99,6 +99,7 @@ public class memberprofile extends AppCompatActivity {
 
     private void buildProfile() {
         progressDialog.setMessage("submitting");
+        progressDialog.setCancelable(false);
         progressDialog.show();
        final String fname = mfname.getText().toString().trim();
         final String lname  = mlname.getText().toString().trim();
@@ -160,6 +161,11 @@ public class memberprofile extends AppCompatActivity {
 
                 }
             });
+        }
+        else
+        {
+            progressDialog.dismiss();
+            Toast.makeText(this,"Please!, Fill Out All The Fields!!!",Toast.LENGTH_LONG).show();
         }
 
     }

@@ -23,12 +23,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -55,6 +51,9 @@ public class PostActivity extends AppCompatActivity {
 
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReferenceBlogsCount;
+
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +66,7 @@ public class PostActivity extends AppCompatActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Blogs");
+        databaseReferenceBlogsCount= FirebaseDatabase.getInstance().getReference().child("BlogsCount");
 
         imageButton = (ImageButton )findViewById(R.id.idimage);
 
@@ -75,6 +75,8 @@ public class PostActivity extends AppCompatActivity {
         post_Description =(EditText )findViewById(R.id.idpostdescription);
 
         submit = (Button )findViewById(R.id.idpost);
+
+        bundle = getIntent().getExtras();
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +104,10 @@ public class PostActivity extends AppCompatActivity {
 
     private void starttposting()
     {
+
+        progressDialog.setCancelable(false);
         progressDialog.show();
+
         final String tit=post_title.getText().toString().trim();
         final String titdis=post_Description.getText().toString().trim();
 
@@ -116,7 +121,8 @@ public class PostActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    Toast.makeText(PostActivity.this,"Posting Process Is Failed!!!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(PostActivity.this,"Uploading Of Image Is Failed!!!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(PostActivity.this,"Retry Again!!!",Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -126,39 +132,50 @@ public class PostActivity extends AppCompatActivity {
 
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    final DatabaseReference newPost= databaseReference.push();
-
-                    newPost.child("title").setValue(tit);
-                    newPost.child("description").setValue(titdis);
-                    newPost.child("image").setValue(downloadUrl.toString().trim());
-                    newPost.child("postDate").setValue(new Date().toString());
-                    DatabaseReference data=FirebaseDatabase.getInstance().getReference().child("Users");
-                    data.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()))
-                            {
-                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
-                                String name = ""+dataSnapshot.child(uid).child("First_Name").getValue().toString()+" "+dataSnapshot.child(uid).child("Last_Name").getValue().toString()+" "+dataSnapshot.child(uid).child("Post_Of_User").getValue().toString();
-                                newPost.child("userName").setValue(name);
-                                newPost.child("userUID").setValue(uid);
-                            }
+                    try {
+                        final DatabaseReference newPost= databaseReference.push();
+                        if(newPost!=null)
+                        {
+                            newPost.child("title").setValue(tit);
+                            newPost.child("description").setValue(titdis);
+                            newPost.child("image").setValue(downloadUrl.toString());
+                            newPost.child("postDate").setValue(new Date().toString().replace("GMT+05:30",""));
+                            newPost.child("TimeStamp").setValue(System.currentTimeMillis());
+                            newPost.child("userName").setValue(bundle.getString("UserName"));
+                            newPost.child("userUID").setValue(bundle.getString("UserUid"));
                         }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
+                        else
+                        {
+                            onSuccess(taskSnapshot);
                         }
-                    });
+                    }catch (Exception e){Toast.makeText(getApplicationContext(),"Uploading failed",Toast.LENGTH_LONG).show();
+                    onSuccess(taskSnapshot);}
                     progressDialog.dismiss();
                     Toast.makeText(PostActivity.this,"Blog Has Been Posted!!!!!!!!!",Toast.LENGTH_LONG).show();
-
                     Intent intent =new Intent(PostActivity.this,Navigation.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
             });
 
+        }
+        else
+        {
+            if(TextUtils.isEmpty(tit))
+            {
+                progressDialog.dismiss();
+                Toast.makeText(PostActivity.this,"Please, Fill Out Title For The Blog!!!",Toast.LENGTH_LONG).show();
+            }
+            if(TextUtils.isEmpty(titdis))
+            {
+                progressDialog.dismiss();
+                Toast.makeText(PostActivity.this,"Please , Fill Out Description For The Blog!!!",Toast.LENGTH_LONG).show();
+            }
+            if(imageURI== null)
+            {
+                progressDialog.dismiss();
+                Toast.makeText(PostActivity.this,"Please , Select a Picture For The Blog!!!",Toast.LENGTH_LONG).show();
+            }
         }
 
     }
@@ -190,6 +207,7 @@ public class PostActivity extends AppCompatActivity {
                     imageURI = data.getData();
 
                     imageButton.setImageURI(imageURI);
+
                    /* String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
                     // Get the cursor

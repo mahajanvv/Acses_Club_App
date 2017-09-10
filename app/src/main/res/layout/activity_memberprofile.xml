@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/backer"
     tools:context="com.example.dontknow.acses.memberprofile">
 
     <EditText
@@ -85,6 +86,7 @@
         android:layout_marginTop="50dp"
         android:id="@+id/idsubmit"
         android:padding="15dp"
+        android:textColor="#ffffff"
         android:background="@drawable/postbtn"/>
 
     <Button
@@ -97,5 +99,6 @@
         android:id="@+id/idcancel"
         android:layout_marginTop="20dp"
         android:padding="15dp"
+        android:textColor="#ffffff"
         android:background="@drawable/postbtn"/>
 </RelativeLayout>

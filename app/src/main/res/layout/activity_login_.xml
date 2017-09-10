@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="25dp"
         android:id="@+id/idemail"
         android:background="@drawable/input_bk"
         android:hint="Email ID ......"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:layout_marginTop="39dp"
+        android:layout_marginTop="25dp"
         android:id="@+id/idpassword"
         android:padding="10dp"
         android:background="@drawable/input_bk"
@@ -68,8 +68,24 @@
         android:padding="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="25dp"
         android:layout_below="@+id/idpassword"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/idforgetpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot Password?"
+        android:layout_below="@+id/idsignin"
+        android:textColor="#00008B"
+        android:textSize="16sp"
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+
+        />
 
 </RelativeLayout>

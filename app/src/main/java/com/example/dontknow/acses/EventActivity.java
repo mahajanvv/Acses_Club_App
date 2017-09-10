@@ -51,6 +51,7 @@ public class EventActivity extends Activity {
 
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceusers;
+    private DatabaseReference databaseReferenceEventCount;
 
     private ProgressDialog progressDialog;
 
@@ -64,6 +65,8 @@ public class EventActivity extends Activity {
     private GoogleApiClient client;
 
     private RadioGroup radioGroup;
+
+    private Bundle bundle;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -87,6 +90,10 @@ public class EventActivity extends Activity {
         databaseReference.keepSynced(true);
 
         databaseReferenceusers = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        databaseReferenceEventCount =FirebaseDatabase.getInstance().getReference().child("EventsCount");
+
+        bundle= getIntent().getExtras();
 
 
         eventback.setOnClickListener(new View.OnClickListener() {
@@ -214,8 +221,8 @@ public class EventActivity extends Activity {
     }
     private void updateLabel() {
 
-        String myFormat = "dd/MM/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
 
         eventdate.setText(sdf.format(myCalendar.getTime()));
     }
@@ -223,6 +230,7 @@ public class EventActivity extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void startpublishing() {
         progressDialog.setMessage("Publishing Event !!!!");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         String type = eventtype.getText().toString().trim();
         String topic = eventtopic.getText().toString().trim();
@@ -266,6 +274,34 @@ public class EventActivity extends Activity {
             Toast.makeText(EventActivity.this, "Event Has been published", Toast.LENGTH_LONG).show();
             startActivity(intent);
 
+        }
+        else
+        {
+            if(TextUtils.isEmpty(type))
+            {
+                progressDialog.dismiss();
+                Toast.makeText(EventActivity.this,"Please, Select Type Of Event!!!!!!",Toast.LENGTH_LONG).show();
+            }
+            if(TextUtils.isEmpty(topic))
+            {
+                progressDialog.dismiss();
+                Toast.makeText(EventActivity.this,"Please, Enter Topic Of Event!!!",Toast.LENGTH_LONG).show();
+            }
+            if(TextUtils.isEmpty(desc))
+            {
+                progressDialog.dismiss();
+                Toast.makeText(EventActivity.this,"Please, Enter Description Of Event!!!",Toast.LENGTH_LONG).show();
+            }
+            if(TextUtils.isEmpty(date))
+            {
+                progressDialog.dismiss();
+                Toast.makeText(EventActivity.this,"Please, Select date Of Event!!!!",Toast.LENGTH_LONG).show();
+            }
+            if(TextUtils.isEmpty(time))
+            {
+                progressDialog.dismiss();
+                Toast.makeText(EventActivity.this,"Please, Select Time Of Event!!!!",Toast.LENGTH_LONG).show();
+            }
         }
     }
 

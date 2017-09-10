@@ -61,6 +61,7 @@ public class Edit_Blog_Activity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     private String deleteimage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +76,7 @@ public class Edit_Blog_Activity extends AppCompatActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Blogs");
+
 
         progressDialog  = new ProgressDialog(this);
 
@@ -101,6 +103,7 @@ public class Edit_Blog_Activity extends AppCompatActivity {
     private  void starteditpost()
     {
         progressDialog.setMessage("Posting Edited Blog!!!!");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final String tit=editposttittle.getText().toString().trim();
         final String titdis=editpostdescrpt.getText().toString().trim();
@@ -129,6 +132,7 @@ public class Edit_Blog_Activity extends AppCompatActivity {
                     databaseReference.child(Post_key).child("description").setValue(titdis);
                     databaseReference.child(Post_key).child("image").setValue(downloadUrl.toString().trim());
                     databaseReference.child(Post_key).child("postDate").setValue(new Date().toString().trim());
+                    databaseReference.child(Post_key).child("TimeStamp").setValue(System.currentTimeMillis());
                     //photoRef.delete();
                     FirebaseStorage.getInstance().getReferenceFromUrl(deleteimage).delete();
                     progressDialog.dismiss();
@@ -140,6 +144,11 @@ public class Edit_Blog_Activity extends AppCompatActivity {
                 }
             });
 
+        }
+        else
+        {
+            progressDialog.dismiss();
+            Toast.makeText(this,"Please Select an Image And Dont Leave Fields Empty",Toast.LENGTH_LONG).show();
         }
     }
 

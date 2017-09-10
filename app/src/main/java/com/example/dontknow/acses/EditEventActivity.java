@@ -86,7 +86,7 @@ public class EditEventActivity extends AppCompatActivity {
         editback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EditEventActivity.this,Upcoming_Events.class);
+                Intent intent = new Intent(EditEventActivity.this,Navigation.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -149,6 +149,7 @@ public class EditEventActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void startpublishing() {
         progressDialog.setMessage("Updating Event !!!!");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         String type = edittype.getText().toString().trim();
         String topic = edittopic.getText().toString().trim();
@@ -169,7 +170,7 @@ public class EditEventActivity extends AppCompatActivity {
             databaseReference.child(post_key).child("Event_Post_Time").setValue(new Date().toString());
             // databaseReferenceevent.child("Event_PosterName").child();
             progressDialog.dismiss();
-            Intent intent = new Intent(EditEventActivity.this, Upcoming_Events.class);
+            Intent intent = new Intent(EditEventActivity.this, Navigation.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Toast.makeText(EditEventActivity.this, "Event Has been Updated", Toast.LENGTH_LONG).show();
             startActivity(intent);
@@ -280,8 +281,10 @@ public class EditEventActivity extends AppCompatActivity {
         if(itemid == R.id.ideventdelete)
         {
             databaseReference.child(post_key).removeValue();
-            Intent intent = new Intent(EditEventActivity.this, Upcoming_Events.class);
+//            FirebaseDatabase.getInstance().getReference().child("EventsCount").setValue(""+(Integer.parseInt(getIntent().getExtras().getString("eventcnt"))-1));
+            Intent intent = new Intent(EditEventActivity.this, Navigation.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             Toast.makeText(EditEventActivity.this,"Event has Been deleted!!!!!",Toast.LENGTH_LONG).show();
             startActivity(intent);
         }

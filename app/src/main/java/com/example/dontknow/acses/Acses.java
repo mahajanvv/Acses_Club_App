@@ -1,6 +1,8 @@
 package com.example.dontknow.acses;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.firebase.client.Firebase;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,5 +37,11 @@ public class Acses extends Application{
         built.setIndicatorsEnabled(false);
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);*/
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

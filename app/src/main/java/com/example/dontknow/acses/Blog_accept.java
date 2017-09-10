@@ -10,20 +10,30 @@ public class Blog_accept {
     private String postDate;
     private String userUID;
     private String image;
+    private long TimeStamp;
 
     public Blog_accept(){}
 
-    public Blog_accept(String description, String title, String image,String postDate,String userName,String userUID) {
+    public Blog_accept(String description, String title, String image,String postDate,String userName,String userUID,long TimeStamp) {
         this.userName=userName;
         this.postDate=postDate;
         this.description = description;
         this.title = title;
         this.image = image;
         this.userUID= userUID;
+        this.TimeStamp = TimeStamp;
     }
 
     public String getUserUID() {
         return userUID;
+    }
+
+    public long getTimeStamp() {
+        return TimeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        TimeStamp = timeStamp;
     }
 
     public void setUserUID(String userUID) {

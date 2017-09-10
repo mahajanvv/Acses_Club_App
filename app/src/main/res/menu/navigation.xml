@@ -7,4 +7,11 @@
         app:showAsAction="never"
         android:visible="true"
         android:title="logout" />
+
+    <item android:title="Refresh"
+        android:id="@+id/idrefreshnavi"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_refresh_white_24dp"
+        android:visible="true"
+        />
 </menu>

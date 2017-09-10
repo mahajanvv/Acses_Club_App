@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/greybk"
+    android:background="@drawable/back"
     tools:context="com.example.dontknow.acses.PostActivity">
 
     <ImageButton
@@ -23,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Post Title..........."
+        android:hint="Post Title..........."
         android:ems="10"
         android:layout_below="@+id/idimage"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:id="@+id/idposttitle"
         android:layout_alignParentStart="true"
         android:padding="15dp"
@@ -40,7 +40,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="150dp"
         android:layout_below="@id/idposttitle"
         android:inputType="textMultiLine"
         android:ems="10"
@@ -50,7 +50,7 @@
         android:layout_marginRight="15dp"
         android:padding="15dp"
         android:background="@drawable/postdraw"
-        android:text="Post Description........."
+        android:hint="Post Description........."
         />
 
     <Button
@@ -61,7 +61,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/idpost"
         android:textStyle="bold"
-        android:layout_marginTop="30dp"
+        android:textColor="#ffffff"
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="0dp"
         android:padding="15dp"

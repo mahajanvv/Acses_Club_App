@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +22,7 @@ public class login_Activity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private Button login;
+    private TextView forgetpassword;
 
     private FirebaseAuth auth;
 
@@ -34,10 +36,12 @@ public class login_Activity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.idemail);
         password  = (EditText )findViewById(R.id.idpassword);
         login = (Button )findViewById(R.id.idsignin);
+        forgetpassword=(TextView)findViewById(R.id.idforgetpassword);
 
         auth = FirebaseAuth.getInstance();
 
         progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,10 +49,38 @@ public class login_Activity extends AppCompatActivity {
                 Signin();
             }
         });
+
+        forgetpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(email.getText().toString()))
+                {
+                    Toast.makeText(login_Activity.this,"Please, Enter Your Email Address !!!",Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    progressDialog.setMessage("Requesting For Password Reset!!!");
+
+                    progressDialog.show();
+                    auth.sendPasswordResetEmail(email.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(login_Activity.this,"Password Reset mail Is Sent To Your Email Address!!!",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+                }
+            }
+        });
     }
     private void Signin()
     {
         progressDialog.setMessage("Signing In!!!!!!!!");
+
         progressDialog.show();
         String em  = email.getText().toString().trim();
         String pin = password.getText().toString().trim();
@@ -77,9 +109,14 @@ public class login_Activity extends AppCompatActivity {
                 }
             });
         }
-
+        else
+        {
+            progressDialog.dismiss();
+            Toast.makeText(this,"Please Fill Out All The Fields!!!!",Toast.LENGTH_LONG).show();
+        }
 
 
 
     }
+
 }

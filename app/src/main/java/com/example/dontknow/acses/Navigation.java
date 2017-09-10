@@ -29,8 +29,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 public class Navigation extends AppCompatActivity
@@ -38,7 +38,7 @@ public class Navigation extends AppCompatActivity
 
     private RecyclerView recyclerView=null;
 
-    private Query databaseReference=null;
+    private DatabaseReference databaseReference;
     private DatabaseReference databaseReferencedelete;
 
     private FirebaseAuth auth=null;
@@ -46,6 +46,8 @@ public class Navigation extends AppCompatActivity
 
     private ProgressDialog progressDialog;
     private DatabaseReference databaseReferenceusers;
+
+    private TextView cnt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,23 +57,13 @@ public class Navigation extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         progressDialog = new ProgressDialog(this);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog.dismiss();
-                Intent intent =new Intent(Navigation.this,PostActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        cnt=(TextView)findViewById(R.id.textView2);
 
         auth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -91,8 +83,11 @@ public class Navigation extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Blogs").orderByChild("postDate");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Blogs");
         databaseReference.keepSynced(true);
+
+
+
         databaseReferencedelete = FirebaseDatabase.getInstance().getReference().child("Blogs");
         databaseReferenceusers = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -104,6 +99,42 @@ public class Navigation extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                databaseReferenceusers.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.hasChild(auth.getCurrentUser().getUid()))
+                        {
+                            Toast.makeText(Navigation.this,"Build Your Profile First!!!",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Navigation.this,memberprofile.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent =new Intent(Navigation.this,PostActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            String name=dataSnapshot.child(auth.getCurrentUser().getUid().toString()).child("First_Name").getValue().toString().trim()+" "+
+                                    dataSnapshot.child(auth.getCurrentUser().getUid().toString()).child("Last_Name").getValue().toString().trim()+" "+
+                                    dataSnapshot.child(auth.getCurrentUser().getUid().toString()).child("Post_Of_User").getValue().toString().trim();
+                            intent.putExtra("UserName",name);
+                            intent.putExtra("UserUid",auth.getCurrentUser().getUid().toString());
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
     }
 
     public void onStart() {
@@ -111,52 +142,82 @@ public class Navigation extends AppCompatActivity
 
         auth.addAuthStateListener(authStateListener);
 
-        FirebaseRecyclerAdapter<Blog_accept,BlogViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Blog_accept,BlogViewHolder>(
-                Blog_accept.class,R.layout.blog_row,BlogViewHolder.class,databaseReference
-        ) {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+        FirebaseDatabase.getInstance().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            protected void populateViewHolder(final BlogViewHolder viewHolder, final Blog_accept model, final int position) {
-
-                /*if(new SimpleDateFormat("dd/mm/yyyy").format(model.getPostDate()).compareTo(new SimpleDateFormat("dd/mm/yyyy").format(new Date(System.currentTimeMillis())))<0)
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild("Blogs"))
                 {
-                    //arrayList.add(getRef(position).getKey());
-                    Toast.makeText(Navigation.this,"delte",Toast.LENGTH_LONG).show();
-                    //databaseReferencedelete.child(getRef(position).getKey()).removeValue();
+                    cnt.setVisibility(View.GONE);
                 }
                 else
-                {*/
-                    viewHolder.setTitle(model.getTitle());
-                    viewHolder.setDesc(model.getDescription());
-                    viewHolder.setImage(getApplicationContext(),model.getImage());
-                    viewHolder.setpostdate(model.getPostDate());
-                    viewHolder.setpostUserName(model.getUserName());
-                //}
+                {
+                    cnt.setVisibility(View.VISIBLE);
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                viewHolder.view.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-
-                       // Toast.makeText(Navigation.this,model.getUserUID()+"="+FirebaseAuth.getInstance().getCurrentUser().getUid(),Toast.LENGTH_LONG).show();
-                        if(model.getUserUID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+            }
+        });
+            FirebaseRecyclerAdapter<Blog_accept,BlogViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Blog_accept,BlogViewHolder>(
+                    Blog_accept.class,R.layout.blog_row,BlogViewHolder.class,databaseReference
+            ) {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                protected void populateViewHolder(final BlogViewHolder viewHolder, final Blog_accept model, final int position) {
+                    try {
+                        long timestamp=model.getTimeStamp();
+                        if(timestamp<(System.currentTimeMillis()-5*24*60*60*1000))
                         {
-                            Intent intent = new Intent(Navigation.this,Edit_Blog_Activity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("Post_Key",getRef(position).getKey());
-                            //Toast.makeText(Navigation.this,"Long Pressed",Toast.LENGTH_LONG).show();
-                            startActivity(intent);
+                            //arrayList.add(getRef(position).getKey());
+                            //Toast.makeText(Navigation.this,"delte",Toast.LENGTH_LONG).show();
+                            try
+                            {
+                                FirebaseStorage.getInstance().getReferenceFromUrl(model.getImage()).delete();
+                            }catch (Exception e){
+                                Toast.makeText(getApplicationContext(),"Something Went Wrong",Toast.LENGTH_LONG).show();
+                                populateViewHolder(viewHolder,model,position);
+                            }
+
+                            databaseReferencedelete.child(getRef(position).getKey()).removeValue();
                         }
                         else
                         {
-                            Toast.makeText(Navigation.this,"Your are not Authorised To Edit This Blog",Toast.LENGTH_LONG).show();
+                            viewHolder.setTitle(model.getTitle());
+                            viewHolder.setDesc(model.getDescription());
+                            viewHolder.setImage(getApplicationContext(),model.getImage());
+                            viewHolder.setpostdate(model.getPostDate());
+                            viewHolder.setpostUserName(model.getUserName());
+
                         }
-                        return false;
                     }
-                });
-            }
-        };
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
+                    catch (Exception e){populateViewHolder(viewHolder,model,position);}
+                    viewHolder.view.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+
+                            // Toast.makeText(Navigation.this,model.getUserUID()+"="+FirebaseAuth.getInstance().getCurrentUser().getUid(),Toast.LENGTH_LONG).show();
+                            if(model.getUserUID().equals(auth.getCurrentUser().getUid()))
+                            {
+                                Intent intent = new Intent(Navigation.this,Edit_Blog_Activity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra("Post_Key",getRef(position).getKey());
+                                //Toast.makeText(Navigation.this,"Long Pressed",Toast.LENGTH_LONG).show();
+                                startActivity(intent);
+                            }
+                            else
+                            {
+                                Toast.makeText(Navigation.this,"Your are not Authorised To Edit This Blog",Toast.LENGTH_LONG).show();
+                            }
+                            return false;
+                        }
+                    });
+                }
+
+            };
+            recyclerView.setAdapter(firebaseRecyclerAdapter);
+
     }
 
 
@@ -232,6 +293,13 @@ public class Navigation extends AppCompatActivity
             startActivity(intent);
             return true;
         }
+        if(id == R.id.idrefreshnavi)
+        {
+            onStart();
+            /*Intent intent = getIntent();
+            finish();
+            startActivity(intent);*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -250,7 +318,10 @@ public class Navigation extends AppCompatActivity
         }
         else if(id==R.id.idBlogsActivity)
         {
-
+            onStart();
+            /*Intent intent = getIntent();
+            finish();
+            startActivity(intent);*/
         }
         else if(id==R.id.idPostBlogsActivity)
         {
@@ -268,6 +339,11 @@ public class Navigation extends AppCompatActivity
                     {
                         Intent intent =new Intent(Navigation.this,PostActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        String name=dataSnapshot.child(auth.getCurrentUser().getUid().toString()).child("First_Name").getValue().toString().trim()+" "+
+                        dataSnapshot.child(auth.getCurrentUser().getUid().toString()).child("Last_Name").getValue().toString().trim()+" "+
+                        dataSnapshot.child(auth.getCurrentUser().getUid().toString()).child("Post_Of_User").getValue().toString().trim();
+                        intent.putExtra("UserName",name);
+                        intent.putExtra("UserUid",auth.getCurrentUser().getUid().toString());
                         startActivity(intent);
                     }
                 }
